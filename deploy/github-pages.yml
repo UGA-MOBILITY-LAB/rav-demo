@@ -1,0 +1,38 @@
+# Copy to .github/workflows/pages.yml to publish on GitHub Pages.
+# Repository → Settings → Pages → Source: GitHub Actions
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true            # point clouds are usually tracked with git-lfs
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run data      # skip this line once data/ holds your real map
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

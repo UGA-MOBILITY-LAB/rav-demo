@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run data && npm run build",
+  "outputDirectory": "dist",
+  "headers": [
+    { "source": "/data/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=2592000, immutable" }] },
+    { "source": "/config.js", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
+  ]
+}

@@ -1,0 +1,14 @@
+# Drop this file in the repository root (not in deploy/) if you use Netlify.
+[build]
+  command = "npm run data && npm run build"
+  publish = "dist"
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000, immutable"
+
+[[headers]]
+  for = "/config.js"
+  [headers.values]
+    Cache-Control = "no-cache"

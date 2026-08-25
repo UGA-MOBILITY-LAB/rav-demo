@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lanelet Inspector</title>
+<meta name="description" content="Browser-based viewer for Lanelet2 HD maps and LiDAR point clouds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="src/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230f141b'/><path d='M6 28 L14 4 M26 28 L18 4' stroke='%23dde6f1' stroke-width='2.5' fill='none'/><path d='M16 6 v4 M16 14 v4 M16 22 v4' stroke='%23ffb454' stroke-width='2.5'/></svg>">
+</head>
+<body>
+
+<div id="app">
+  <header id="topbar">
+    <div class="brand">
+      <img class="brand-logo" src="logo.png" alt="UGA Mobility Lab" onerror="this.style.display='none'">
+      <div class="brand-text">
+        <h1 id="appTitle">UGA Demo</h1>
+        <small class="hide-sm" id="appSubtitle">example point map and hdmap</small>
+      </div>
+    </div>
+    <button class="btn" id="collapseLeft" title="Toggle the left panel  [ ">Panel</button>
+    <div class="spacer"></div>
+    <div class="group">
+      <button class="btn" id="btnFit" title="Fit everything in view  (F)">Fit</button>
+      <button class="btn" id="btnTop" title="Top-down view  (T)">Top</button>
+      <button class="btn" id="btnIso" title="Perspective view  (3)">3D</button>
+      <button class="btn" id="btnMeasure" title="Measure between two points  (M)">Measure</button>
+    </div>
+    <label class="switch hide-sm" title="Light background for figures and printing">
+      <input type="checkbox" id="bgToggle"><span>Light bg</span>
+    </label>
+  </header>
+
+  <aside id="side-left">
+    <section class="sec">
+      <h3>Layers</h3>
+      <ul class="layers">
+        <li><label><input type="checkbox" data-layer="cloud" checked><i style="background:#7fbf7f"></i>Point cloud</label></li>
+        <li><label><input type="checkbox" data-layer="lanelets" checked><i style="background:#4a8fff"></i>Lanelet surfaces</label></li>
+        <li><label><input type="checkbox" data-layer="boundaries" checked><i style="background:#f2f2f2"></i>Boundaries</label></li>
+        <li><label><input type="checkbox" data-layer="stoplines" checked><i style="background:#ff4d5e"></i>Stop lines</label></li>
+        <li><label><input type="checkbox" data-layer="signals" checked><i style="background:#2ee6a8"></i>Traffic signs</label></li>
+        <li><label><input type="checkbox" data-layer="arrows" checked><i style="background:#dff1ff"></i>Direction arrows</label></li>
+        <li><label><input type="checkbox" data-layer="challenges" checked><i style="background:#ff5e5e"></i>Route challenges</label></li>
+        <li><label><input type="checkbox" data-layer="grid" checked><i style="background:#2a3646"></i>Ground grid</label></li>
+      </ul>
+      <label class="field" style="margin-top:9px"><span>map overlay opacity</span>
+        <input type="range" id="mapOpacity" min="0.05" max="1" step="0.05" value="0.42">
+      </label>
+    </section>
+
+    <section class="sec collapsed">
+      <h3>Route challenges</h3>
+      <ul class="layers" id="challengeList"><li><span>—</span></li></ul>
+      <p class="hint" id="challengeHint" style="margin-top:6px">A coloured dot marks each AV difficulty spot at the lane centre. Hover a dot to read the difficulty; tick a category to filter.</p>
+    </section>
+
+    <section class="sec collapsed">
+      <h3>Point cloud</h3>
+      <div class="stack">
+        <div class="row">
+          <label class="field"><span>colour by</span>
+            <select id="colorMode">
+              <option value="height">height (z)</option>
+              <option value="intensity">intensity</option>
+              <option value="rgb">rgb</option>
+              <option value="flat">flat grey</option>
+            </select>
+          </label>
+          <label class="field"><span>budget</span>
+            <select id="budget">
+              <option value="500000">500 k</option>
+              <option value="1000000">1 M</option>
+              <option value="2500000" selected>2.5 M</option>
+              <option value="5000000">5 M</option>
+              <option value="12000000">12 M</option>
+            </select>
+          </label>
+        </div>
+        <div id="ramp" class="hidden">
+          <div class="ramp-bar"></div>
+          <div class="ramp-scale"><span class="ramp-lo">—</span><span class="ramp-hi">—</span></div>
+        </div>
+        <label class="field"><span>point size · <b id="pointSizeOut">1.6</b> px</span>
+          <input type="range" id="pointSize" min="0.5" max="6" step="0.1" value="1.6">
+        </label>
+        <div>
+          <span style="font-family:var(--cond);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)">
+            offset vs. map (m)
+          </span>
+          <div class="row" style="margin-top:4px">
+            <input type="number" id="offX" value="0" step="0.5" aria-label="offset x">
+            <input type="number" id="offY" value="0" step="0.5" aria-label="offset y">
+            <input type="number" id="offZ" value="0" step="0.5" aria-label="offset z">
+            <button class="btn sm" id="resetOffset">0</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec collapsed">
+      <h3>Elements in map</h3>
+      <ul class="legend" id="typeLegend"><li><span>load a map to see its element types</span></li></ul>
+    </section>
+
+    <section class="sec">
+      <h3>Controls</h3>
+      <p class="hint">
+        Drag to orbit · right-drag or shift-drag to pan · scroll to zoom.<br>
+        Click a lane or line to inspect it.<br>
+        <kbd>F</kbd> fit · <kbd>T</kbd> top · <kbd>3</kbd> 3D · <kbd>M</kbd> measure · <kbd>Esc</kbd> deselect
+      </p>
+    </section>
+  </aside>
+
+  <main id="viewport">
+    <canvas id="gl"></canvas>
+
+    <div id="viewTools"></div>
+    <div id="challengeTip"></div>
+
+    <div id="dropzone">
+      <div class="dz-inner">
+        <div class="dz-mark"><i style="height:12px"></i><i style="height:22px"></i><i style="height:34px"></i><i style="height:18px"></i><i style="height:26px"></i></div>
+        <h2>Loading map…</h2>
+        <div class="dz-progress" id="dzProgress">
+          <div class="dz-bar"><i id="dzBar"></i></div>
+          <div class="dz-prog-label" id="dzProgLabel">preparing…</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="hud">
+      <div class="chip" id="coords"><span>x</span>—<span>y</span>—</div>
+      <div class="chip"><span>fps</span><b id="fps">—</b></div>
+      <div class="chip hidden" id="measurePanel"><span>measure</span><div id="measureOut"><span class="muted">click two points</span></div></div>
+    </div>
+  </main>
+
+  <aside id="side-right">
+    <div class="ins-bar">
+      <h3>Inspector</h3>
+      <button id="closeInspector" title="Close (Esc)">✕</button>
+    </div>
+    <div id="inspector"></div>
+  </aside>
+</div>
+
+<div id="status"></div>
+
+<div id="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="modalTitle">Details</h3>
+      <div class="group">
+        <button class="btn sm" id="modalCopy">Copy</button>
+        <button class="btn sm" id="modalClose">Close</button>
+      </div>
+    </div>
+    <pre id="modalBody"></pre>
+    <img id="modalImg" class="hidden" alt="Snapshot of the current view">
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept=".osm,.xml,.pcd" multiple style="display:none">
+
+<script src="config.js"></script>
+<script src="vendor/three.min.js"></script>
+<script src="src/parsers.js"></script>
+<script src="src/demo.js"></script>
+<script src="src/viewer.js"></script>
+<script src="src/loader.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>

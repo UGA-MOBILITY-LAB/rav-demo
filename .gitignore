@@ -1,0 +1,12 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+
+# Raw map data — real, unpublished lab scans. Not committed to the repo.
+# On the live site they are hosted as a GitHub Release asset and pulled into
+# the Pages build by the deploy workflow. challenges.json is kept (it is just
+# annotations keyed to lanelet ids, no scan data).
+data/*.pcd
+data/*.pcd.gz
+data/*.osm

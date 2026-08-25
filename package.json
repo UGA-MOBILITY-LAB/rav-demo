@@ -1,0 +1,17 @@
+{
+  "name": "lanelet-inspector",
+  "version": "1.0.0",
+  "description": "Browser-based viewer for Lanelet2 HD maps (.osm) and LiDAR point clouds (.pcd).",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "node server.mjs . 8080",
+    "data": "node scripts/make-example-data.mjs",
+    "build": "node scripts/build.mjs",
+    "serve": "node server.mjs dist 8080",
+    "preview": "npm run build && npm run serve"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}
