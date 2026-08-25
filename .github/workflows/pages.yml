@@ -1,7 +1,7 @@
 # Deploy the viewer to GitHub Pages.
-# The raw map data (.osm / .pcd) is NOT in this repo — it is stored as an asset
-# on the "data" release and pulled into the build here, so the deployed site
-# serves it same-origin while the git tree stays free of the large scan files.
+# The raw map data (.osm / .pcd) is deliberately NOT on GitHub. It is hosted
+# externally (a CORS-enabled host) and config.js points at that URL, so the
+# browser fetches it at runtime. This workflow only builds and deploys the code.
 name: Deploy to GitHub Pages
 on:
   push:
@@ -22,12 +22,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Fetch map data from the 'data' release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          mkdir -p data
-          gh release download data --repo "$GITHUB_REPOSITORY" --dir data --clobber
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:

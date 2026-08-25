@@ -42,7 +42,7 @@ The viewer marks each difficulty spot at the lane centre with a coloured dot, fi
 
 ## Data
 
-The raw HD map (`.osm`) and LiDAR point cloud (`.pcd`) are **not committed to this repository**. On the live site they are hosted as a release asset and pulled into the deployed build, so the viewer loads them at runtime. `data/challenges.json` — the categorised route-challenge annotations, keyed to lanelet ids — is kept in the repo.
+The raw HD map (`.osm`) and LiDAR point cloud (`.pcd`) are **not stored on GitHub** — neither in the repository nor as release assets. They are hosted separately on a CORS-enabled host, and `config.js` points the viewer at those URLs, so the browser fetches them at runtime. `data/challenges.json` — the categorised route-challenge annotations, keyed to lanelet ids — is kept in the repo.
 
 To run against your own data, drop an `.osm` and `.pcd` into `data/` and point `config.js` at them.
 

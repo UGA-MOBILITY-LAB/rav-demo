@@ -132,6 +132,8 @@ async function loadEntryData() {
       ? 'Open the site through a web server (npm start) — browsers block file:// fetches.'
       : e.message;
     status('Entry data did not load. ' + hint, 'error', true);
+    const h2 = dz.querySelector('h2');
+    if (h2) h2.textContent = 'Map data unavailable';
   } finally {
     prog.classList.add('hidden');
     bar.classList.remove('indeterminate');
