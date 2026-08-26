@@ -1,7 +1,7 @@
 # Deploy the viewer to GitHub Pages.
-# The raw map data (.osm / .pcd) is deliberately NOT on GitHub. It is hosted
-# externally (a CORS-enabled host) and config.js points at that URL, so the
-# browser fetches it at runtime. This workflow only builds and deploys the code.
+# NOTE: the data-pull step is added once the "data" release exists (it holds the
+# .osm / .pcd, which are not committed to the git tree). Until then this builds
+# and deploys the code only.
 name: Deploy to GitHub Pages
 on:
   push:
