@@ -1,7 +1,7 @@
 # Deploy the viewer to GitHub Pages.
-# NOTE: the data-pull step is added once the "data" release exists (it holds the
-# .osm / .pcd, which are not committed to the git tree). Until then this builds
-# and deploys the code only.
+# The map data (.osm / .pcd) lives as an asset on the "data" release rather than
+# in the git tree; it is pulled into the build here so the deployed site serves
+# it same-origin while the repository stays free of the large files.
 name: Deploy to GitHub Pages
 on:
   push:
@@ -22,6 +22,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Fetch map data from the 'data' release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p data
+          gh release download data --repo "$GITHUB_REPOSITORY" --dir data --clobber
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
