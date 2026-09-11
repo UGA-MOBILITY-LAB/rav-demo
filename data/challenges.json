@@ -1,9 +1,9 @@
 {
   "_comment": "Route challenges for the UGA demo. Each item is anchored to one or more lanelet relation IDs from the .osm; the viewer highlights those lanelet surfaces in the category colour and shows the note on hover. Add more IDs to a 'lanelets' array to extend a difficulty over more of the road.",
   "categories": [
-    { "key": "unmarked", "label": "Unmarked", "color": "#ff5e5e", "desc": "Unmarked two-way rural road — no pavement markings, so lane position must be inferred from the road edges." },
-    { "key": "two-way", "label": "Rural two-way road", "color": "#ffab3d", "desc": "Rural two-way road — undivided, oncoming traffic shares a narrow corridor." },
-    { "key": "multi", "label": "Wide multi-lane road", "color": "#4a8fff", "desc": "Wide multi-lane cross-section — three-lane centre-turn or divided five-lane arterial." }
+    { "key": "unmarked", "label": "Unmarked", "color": "#ff4dd2", "desc": "Unmarked two-way rural road — no pavement markings, so lane position must be inferred from the road edges." },
+    { "key": "two-way", "label": "Rural two-way road", "color": "#ffcc2e", "desc": "Rural two-way road — undivided, oncoming traffic shares a narrow corridor." },
+    { "key": "multi", "label": "Wide multi-lane road", "color": "#9b6bff", "desc": "Wide multi-lane cross-section — three-lane centre-turn or divided five-lane arterial." }
   ],
   "items": [
     { "cat": "unmarked", "note": "Unmarked two-way rural road", "desc": "No pavement markings, so the vehicle must hold its lane from the road edges alone. Level grade with two curves and a curb-and-gutter edge (~0.1 mi).", "lanelets": [1333] },

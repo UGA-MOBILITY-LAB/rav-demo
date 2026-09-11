@@ -324,6 +324,31 @@ function laneletCategory(rel) {
   return 'other';
 }
 
+/** Upright locator pin at the centroid of a feature's points, so small map
+    features (stop lines, signs) are easy to spot. Added into the feature's
+    layer group, so its existing checkbox shows/hides the pin too. */
+function addLocatorPin(group, pts, colorHex, height = 10, headR = 1.6) {
+  if (!pts || !pts.length) return;
+  let cx = 0, cy = 0, cz = Infinity;
+  for (const p of pts) { cx += p[0]; cy += p[1]; if (p[2] < cz) cz = p[2]; }
+  cx /= pts.length; cy /= pts.length;
+  if (!isFinite(cz)) cz = 0;
+  const col = new THREE.Color(colorHex);
+  const stem = new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(cx, cy, cz), new THREE.Vector3(cx, cy, cz + height)]),
+    new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.9, depthTest: false })
+  );
+  stem.renderOrder = 11;
+  const head = new THREE.Mesh(
+    new THREE.SphereGeometry(headR, 14, 10),
+    new THREE.MeshBasicMaterial({ color: col, depthTest: false })
+  );
+  head.position.set(cx, cy, cz + height);
+  head.renderOrder = 12;
+  group.add(stem, head);
+}
+
 function buildMap(osm) {
   clearGroup(V.layers.lanelets);
   clearGroup(V.layers.boundaries);
@@ -474,6 +499,8 @@ function buildMap(osm) {
       P.push(...p); C.push(...c);
       // also feed the CPU picker
       for (let i = 0; i < s.pts.length - 1; i++) V.stopMeta.push(s.way.id);
+      // findable locator pin (red, matches the stop-line colour)
+      addLocatorPin(V.layers.stoplines, s.pts, PALETTE.stop_line, 8, 1.3);
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3));
@@ -508,6 +535,8 @@ function buildMap(osm) {
       const stem = [[a[0], a[1], a[2]], [a[0], a[1], a[2] - Math.max(0, a[2] - 0.1)]];
       const { p, c } = ribbon(stem, 0.12, 0x8fa3b8, 0);
       P.push(...p); C.push(...c);
+      // findable locator pin (green, matches the traffic-sign colour)
+      addLocatorPin(V.layers.signals, s.pts, PALETTE[s.kind], 11, 1.6);
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3));
