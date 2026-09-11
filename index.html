@@ -30,6 +30,7 @@
       </div>
     </div>
     <button class="btn" id="collapseLeft" title="Toggle the left panel  [ ">Panel</button>
+    <button class="btn accent" id="btnAbout" title="What am I looking at?">? About</button>
     <div class="spacer"></div>
     <div class="group">
       <button class="btn" id="btnFit" title="Fit everything in view  (F)">Fit</button>
@@ -46,14 +47,14 @@
     <section class="sec">
       <h3>Layers</h3>
       <ul class="layers">
-        <li><label><input type="checkbox" data-layer="cloud" checked><i style="background:#7fbf7f"></i>Point cloud</label></li>
-        <li><label><input type="checkbox" data-layer="lanelets" checked><i style="background:#4a8fff"></i>Lanelet surfaces</label></li>
-        <li><label><input type="checkbox" data-layer="boundaries" checked><i style="background:#f2f2f2"></i>Boundaries</label></li>
-        <li><label><input type="checkbox" data-layer="stoplines" checked><i style="background:#ff4d5e"></i>Stop lines</label></li>
-        <li><label><input type="checkbox" data-layer="signals" checked><i style="background:#2ee6a8"></i>Traffic signs</label></li>
-        <li><label><input type="checkbox" data-layer="arrows" checked><i style="background:#dff1ff"></i>Direction arrows</label></li>
-        <li><label><input type="checkbox" data-layer="challenges" checked><i style="background:#ff4dd2"></i>Route challenges</label></li>
-        <li><label><input type="checkbox" data-layer="grid" checked><i style="background:#2a3646"></i>Ground grid</label></li>
+        <li><label data-help="The LiDAR point cloud — a dense 3D scan of the real road. This is the ground truth the HD map was built and checked against."><input type="checkbox" data-layer="cloud" checked><i style="background:#7fbf7f"></i>Point cloud</label></li>
+        <li><label data-help="The drivable lanes of the road, drawn as filled surfaces."><input type="checkbox" data-layer="lanelets" checked><i style="background:#4a8fff"></i>Lanelet surfaces</label></li>
+        <li><label data-help="Lane edge and centre lines, curbs and road borders."><input type="checkbox" data-layer="boundaries" checked><i style="background:#f2f2f2"></i>Boundaries</label></li>
+        <li><label data-help="Stop lines — where a vehicle must stop. A red pin marks each one."><input type="checkbox" data-layer="stoplines" checked><i style="background:#ff4d5e"></i>Stop lines</label></li>
+        <li><label data-help="Traffic sign locations along the route. A green pin marks each one."><input type="checkbox" data-layer="signals" checked><i style="background:#2ee6a8"></i>Traffic signs</label></li>
+        <li><label data-help="The direction of travel along each lane."><input type="checkbox" data-layer="arrows" checked><i style="background:#dff1ff"></i>Direction arrows</label></li>
+        <li><label data-help="Spots that are hard for automated driving. Hover a coloured dot to read why."><input type="checkbox" data-layer="challenges" checked><i style="background:#ff4dd2"></i>Route challenges</label></li>
+        <li><label data-help="A metric reference grid on the ground, for scale."><input type="checkbox" data-layer="grid" checked><i style="background:#2a3646"></i>Ground grid</label></li>
       </ul>
       <label class="field" style="margin-top:9px"><span>map overlay opacity</span>
         <input type="range" id="mapOpacity" min="0.05" max="1" step="0.05" value="0.42">
@@ -170,6 +171,43 @@
     </div>
     <pre id="modalBody"></pre>
     <img id="modalImg" class="hidden" alt="Snapshot of the current view">
+  </div>
+</div>
+
+<!-- floating one-line help for sidebar items (data-help) -->
+<div id="uiTip"></div>
+
+<!-- About / help overlay -->
+<div id="about">
+  <div class="about-box">
+    <div class="about-head">
+      <img class="brand-logo" src="logo.png" alt="" onerror="this.style.display='none'">
+      <h2>What am I looking at?</h2>
+      <button class="btn sm" id="aboutClose">Close</button>
+    </div>
+    <div class="about-body">
+      <p>This is a 3D view of the UGA Mobility Lab's automated-vehicle <b>demo route</b>. It shows the LiDAR <b>point cloud</b> of the real road with the HD <b>map</b> draped on top, so you can see the map against the ground truth it was built from.</p>
+
+      <h4>The point cloud</h4>
+      <p>Millions of 3D points captured by a <b>LiDAR</b> scan of the actual road. It is the “ground truth” the HD map was built and verified against. Points are coloured by height.</p>
+
+      <h4>The HD map layers</h4>
+      <ul>
+        <li><b style="color:#4a8fff">Lanelet surfaces</b> — the drivable lanes.</li>
+        <li><b style="color:#f2f2f2">Boundaries</b> — lane edge/centre lines, curbs and road borders.</li>
+        <li><b style="color:#ff4d5e">Stop lines</b> &amp; <b style="color:#2ee6a8">Traffic signs</b> — marked with red / green pins so they are easy to find.</li>
+        <li><b style="color:#dff1ff">Direction arrows</b> — the direction of travel along each lane.</li>
+        <li><b style="color:#ff4dd2">Route challenges</b> — spots that are hard for automated driving (unmarked road, narrow rural two-way, wide multi-lane…). Hover a coloured dot to read why.</li>
+      </ul>
+
+      <h4>How to use it</h4>
+      <ul>
+        <li><b>Drag</b> to orbit · <b>scroll</b> to zoom · <b>right-drag</b> to pan.</li>
+        <li><b>Click</b> a lane or a pin to inspect its details on the right.</li>
+        <li>Toggle any layer on the left — <b>hover a layer name</b> for a one-line explanation.</li>
+        <li><b>Fit / Top / 3D</b> buttons jump to preset views.</li>
+      </ul>
+    </div>
   </div>
 </div>
 

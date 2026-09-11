@@ -544,6 +544,35 @@ function wireUI(canvas) {
     h.addEventListener('click', () => h.parentElement.classList.toggle('collapsed'));
   });
 
+  // ---- About panel (opens once for first-time visitors, and via the button)
+  const about = $('#about');
+  const openAbout = () => about && about.classList.add('open');
+  const closeAbout = () => about && about.classList.remove('open');
+  if ($('#btnAbout')) $('#btnAbout').addEventListener('click', openAbout);
+  if ($('#aboutClose')) $('#aboutClose').addEventListener('click', closeAbout);
+  if (about) about.addEventListener('click', (e) => { if (e.target === about) closeAbout(); });
+  try { if (!localStorage.getItem('seenAbout')) { openAbout(); localStorage.setItem('seenAbout', '1'); } } catch (_) { /* private mode */ }
+
+  // ---- one-line help on hover for any element with data-help
+  const uiTip = $('#uiTip');
+  const showUiTip = (e) => {
+    const el = e.target.closest('[data-help]');
+    if (!el || !uiTip) return;
+    uiTip.textContent = el.dataset.help;
+    uiTip.style.display = 'block';
+    const pad = 12, r = el.getBoundingClientRect();
+    let x = r.right + pad, y = r.top - 2;
+    if (x + uiTip.offsetWidth > window.innerWidth - 8) x = r.left - pad - uiTip.offsetWidth;
+    if (y + uiTip.offsetHeight > window.innerHeight - 8) y = window.innerHeight - 8 - uiTip.offsetHeight;
+    uiTip.style.left = Math.max(8, x) + 'px';
+    uiTip.style.top = Math.max(8, y) + 'px';
+  };
+  const hideUiTip = () => { if (uiTip) uiTip.style.display = 'none'; };
+  $$('[data-help]').forEach((el) => {
+    el.addEventListener('mouseenter', showUiTip);
+    el.addEventListener('mouseleave', hideUiTip);
+  });
+
   // ---- files
   $('#fileInput').addEventListener('change', (e) => loadFiles(e.target.files));
   $$('.pick-files').forEach((b) => b.addEventListener('click', () => $('#fileInput').click()));
@@ -681,7 +710,7 @@ function wireUI(canvas) {
     if (e.key === 'f') fitAll();
     if (e.key === 't') APP.controls.top();
     if (e.key === '3') APP.controls.iso();
-    if (e.key === 'Escape') { clearSelection(); $('#modal').classList.remove('open'); }
+    if (e.key === 'Escape') { clearSelection(); $('#modal').classList.remove('open'); $('#about').classList.remove('open'); }
     if (e.key === 'm') $('#btnMeasure').click();
     if (e.key === '[') $('#side-left').classList.toggle('collapsed');
   });
