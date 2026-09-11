@@ -3,7 +3,8 @@
   "categories": [
     { "key": "unmarked", "label": "Unmarked", "color": "#ff4dd2", "desc": "Unmarked two-way rural road — no pavement markings, so lane position must be inferred from the road edges." },
     { "key": "two-way", "label": "Rural two-way road", "color": "#ffcc2e", "desc": "Rural two-way road — undivided, oncoming traffic shares a narrow corridor." },
-    { "key": "multi", "label": "Wide multi-lane road", "color": "#9b6bff", "desc": "Wide multi-lane cross-section — three-lane centre-turn or divided five-lane arterial." }
+    { "key": "multi", "label": "Wide multi-lane road", "color": "#9b6bff", "desc": "Wide multi-lane cross-section — three-lane centre-turn or divided five-lane arterial." },
+    { "key": "change-direction", "label": "Change direction", "color": "#22d3ee", "desc": "The route changes direction here — a connected turn linking two road segments, where the vehicle must track the heading change and give way as needed." }
   ],
   "items": [
     { "cat": "unmarked", "note": "Unmarked two-way rural road", "desc": "No pavement markings, so the vehicle must hold its lane from the road edges alone. Level grade with two curves and a curb-and-gutter edge (~0.1 mi).", "lanelets": [1333] },
@@ -12,6 +13,7 @@
     { "cat": "two-way", "note": "Rural two-way road", "desc": "Clear centre and edge lines, but multiple grade changes over ~0.69 mi and only a narrow paved shoulder leave little room for error.", "lanelets": [44860] },
     { "cat": "two-way", "note": "Rural two-way road", "desc": "Clear centreline but no edge lines, with multiple bumps and a curve under partial canopy and a narrow paved shoulder (~0.22 mi).", "lanelets": [5395] },
     { "cat": "multi", "note": "Three-lane two-way road", "desc": "Clear centreline but no edge lines on a downhill grade and a gentle left curve; the shared centre lane adds turning and merging complexity (~0.43 mi).", "lanelets": [6614] },
-    { "cat": "multi", "note": "Divided five-lane road", "desc": "Clear centre and edge lines on an uphill grade and a gentle left curve, with higher speeds and more lane changes across the wide cross-section (~0.25 mi).", "lanelets": [1402] }
+    { "cat": "multi", "note": "Divided five-lane road", "desc": "Clear centre and edge lines on an uphill grade and a gentle left curve, with higher speeds and more lane changes across the wide cross-section (~0.25 mi).", "lanelets": [1402] },
+    { "cat": "change-direction", "note": "Change of direction", "desc": "A connected turn where the route changes direction, linking two road segments across five lanelets — the vehicle must track the heading change and yield as needed.", "lanelets": [30068, 44903, 44896, 44917, 44910] }
   ]
 }
