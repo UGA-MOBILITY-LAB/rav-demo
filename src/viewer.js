@@ -500,7 +500,7 @@ function buildMap(osm) {
       // also feed the CPU picker
       for (let i = 0; i < s.pts.length - 1; i++) V.stopMeta.push(s.way.id);
       // findable locator pin (red, matches the stop-line colour)
-      addLocatorPin(V.layers.stoplines, s.pts, PALETTE.stop_line, 8, 1.3);
+      addLocatorPin(V.layers.stoplines, s.pts, PALETTE.stop_line, 11, 3.0);
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3));
@@ -536,7 +536,7 @@ function buildMap(osm) {
       const { p, c } = ribbon(stem, 0.12, 0x8fa3b8, 0);
       P.push(...p); C.push(...c);
       // findable locator pin (green, matches the traffic-sign colour)
-      addLocatorPin(V.layers.signals, s.pts, PALETTE[s.kind], 11, 1.6);
+      addLocatorPin(V.layers.signals, s.pts, PALETTE[s.kind], 14, 3.3);
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3));
