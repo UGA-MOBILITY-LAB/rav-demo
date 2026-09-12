@@ -10,3 +10,6 @@ dist/
 data/*.pcd
 data/*.pcd.gz
 data/*.osm
+
+# local osm edit backups
+data/*.bak*

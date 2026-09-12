@@ -780,6 +780,17 @@ function wayHighlightTris(wayId) {
 
 const DOT_R = 40;            // radius (m) of the dot marking the lane centre (v1 size)
 
+/** Road-level z near (x,y): the z of the closest lanelet centre. Lets a
+    challenge be pinned to a raw map coordinate and still sit on the road. */
+function nearestLaneletZ(x, y) {
+  let best = Infinity, bz = 0;
+  for (const ll of V.lanelets) {
+    const d = (ll.center.x - x) ** 2 + (ll.center.y - y) ** 2;
+    if (d < best) { best = d; bz = ll.center.z; }
+  }
+  return bz;
+}
+
 function buildChallenges(data) {
   const g = V.layers.challenges;
   if (!g) return [];
@@ -816,8 +827,16 @@ function buildChallenges(data) {
       cx += ll.center.x; cy += ll.center.y; cz += ll.center.z; nc++;
     });
 
-    if (nc) {
-      cx /= nc; cy /= nc; cz /= nc;
+    // position: average of the item's lanelet centres, or a raw x/y coordinate
+    let hasPos = false;
+    if (nc) { cx /= nc; cy /= nc; cz /= nc; hasPos = true; }
+    else if (it.x != null && it.y != null) {
+      cx = it.x; cy = it.y;
+      cz = (it.z != null) ? it.z : nearestLaneletZ(cx, cy);
+      hasPos = true;
+    }
+
+    if (hasPos) {
       // a single coloured dot at the lane centre — the hover target (v1 size)
       const dot = new THREE.Mesh(
         new THREE.CircleGeometry(DOT_R, 48),
