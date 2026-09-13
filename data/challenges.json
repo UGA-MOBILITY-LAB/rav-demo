@@ -14,7 +14,7 @@
     { "cat": "two-way", "note": "Rural two-way road", "desc": "Clear centreline but no edge lines, with multiple bumps and a curve under partial canopy and a narrow paved shoulder (~0.22 mi).", "lanelets": [5395] },
     { "cat": "multi", "note": "Three-lane two-way road", "desc": "Clear centreline but no edge lines on a downhill grade and a gentle left curve; the shared centre lane adds turning and merging complexity (~0.43 mi).", "lanelets": [6614] },
     { "cat": "multi", "note": "Divided five-lane road", "desc": "Clear centre and edge lines on an uphill grade and a gentle left curve, with higher speeds and more lane changes across the wide cross-section (~0.25 mi).", "lanelets": [1402] },
-    { "cat": "speed-bump", "note": "Speed bump", "desc": "A raised speed bump across the lane. The vehicle must detect it ahead and slow to cross smoothly; the vertical jolt also briefly disturbs LiDAR and IMU readings.", "x": 67153.65, "y": 75324.53 },
-    { "cat": "speed-bump", "note": "Speed bump", "desc": "A second speed bump on the same stretch — same requirement to detect it early and slow before crossing.", "x": 67155.45, "y": 75301.05 }
+    { "cat": "speed-bump", "note": "Speed bump", "desc": "A raised speed bump across the lane. The vehicle must detect it ahead and slow to cross smoothly; the vertical jolt also briefly disturbs LiDAR and IMU readings.", "x": 67140.39, "y": 75257.62 },
+    { "cat": "speed-bump", "note": "Speed bump", "desc": "A second speed bump further along the route — same requirement to detect it early and slow before crossing.", "x": 66987.61, "y": 75144.24 }
   ]
 }
